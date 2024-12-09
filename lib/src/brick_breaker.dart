@@ -5,15 +5,14 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:sensors_plus/sensors_plus.dart';
 
 import 'components/components.dart';
 import 'config.dart';
 
 enum PlayState { welcome, playing, gameOver, won }
 
-class BrickBreaker extends FlameGame
-    with HasCollisionDetection, KeyboardEvents, TapDetector {
+class BrickBreaker extends FlameGame with HasCollisionDetection, TapDetector {
   BrickBreaker()
       : super(
           camera: CameraComponent.withFixedResolution(
@@ -22,7 +21,7 @@ class BrickBreaker extends FlameGame
           ),
         );
 
-  final ValueNotifier<int> score = ValueNotifier(0); // Add this line
+  final ValueNotifier<int> score = ValueNotifier(0);
   final rand = math.Random();
   double get width => size.x;
   double get height => size.y;
@@ -43,6 +42,8 @@ class BrickBreaker extends FlameGame
     }
   }
 
+  late StreamSubscription<AccelerometerEvent> _accelerometerSubscription;
+
   @override
   FutureOr<void> onLoad() async {
     super.onLoad();
@@ -50,8 +51,26 @@ class BrickBreaker extends FlameGame
     camera.viewfinder.anchor = Anchor.topLeft;
 
     world.add(PlayArea());
-
+    // スケーリングファクターを追加
     playState = PlayState.welcome;
+    const double tiltSensitivity = 0.2;
+
+    _accelerometerSubscription = accelerometerEventStream(
+      samplingPeriod: SensorInterval.gameInterval,
+    ).listen((event) {
+      if (playState == PlayState.playing) {
+        final bat = world.children.query<Bat>().first;
+        final newX = (bat.position.x - event.x * batStep * tiltSensitivity)
+            .clamp(0, width - batWidth);
+        bat.position.x = newX.toDouble();
+      }
+    });
+  }
+
+  @override
+  void onRemove() {
+    _accelerometerSubscription.cancel();
+    super.onRemove();
   }
 
   void startGame() {
@@ -62,7 +81,7 @@ class BrickBreaker extends FlameGame
     world.removeAll(world.children.query<Brick>());
 
     playState = PlayState.playing;
-    score.value = 0; // Add this line
+    score.value = 0;
 
     world.add(Ball(
         difficultyModifier: difficultyModifier,
@@ -94,22 +113,6 @@ class BrickBreaker extends FlameGame
   void onTap() {
     super.onTap();
     startGame();
-  }
-
-  @override
-  KeyEventResult onKeyEvent(
-      KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
-    super.onKeyEvent(event, keysPressed);
-    switch (event.logicalKey) {
-      case LogicalKeyboardKey.arrowLeft:
-        world.children.query<Bat>().first.moveBy(-batStep);
-      case LogicalKeyboardKey.arrowRight:
-        world.children.query<Bat>().first.moveBy(batStep);
-      case LogicalKeyboardKey.space:
-      case LogicalKeyboardKey.enter:
-        startGame();
-    }
-    return KeyEventResult.handled;
   }
 
   @override
