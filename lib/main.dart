@@ -1,7 +1,21 @@
+import 'package:brick_breaker/presentation/home/home_screen.dart';
 import 'package:flutter/material.dart';
 
-import 'src/widgets/game_app.dart';
+
 
 void main() {
-  runApp(const GameApp());
+  runApp(const MinigameApp());
+}
+class MinigameApp extends StatelessWidget {
+  const MinigameApp({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Minigame App',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const HomeScreen(),
+    );
+  }
 }
