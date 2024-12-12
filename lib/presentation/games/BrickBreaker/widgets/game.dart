@@ -5,15 +5,15 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
-import 'package:sensors_plus/sensors_plus.dart';
+import 'package:sensors_plus/sensors_plus.dart'; // Add this import
 
-import 'components/components.dart';
-import 'config.dart';
+import '../components/components.dart';
+import '../config.dart';
 
 enum PlayState { welcome, playing, gameOver, won }
 
-class BrickBreaker extends FlameGame with HasCollisionDetection, TapDetector {
-  BrickBreaker()
+class BrickBreakerGame extends FlameGame with HasCollisionDetection, TapDetector {
+  BrickBreakerGame()
       : super(
           camera: CameraComponent.withFixedResolution(
             width: gameWidth,
@@ -27,6 +27,9 @@ class BrickBreaker extends FlameGame with HasCollisionDetection, TapDetector {
   double get height => size.y;
 
   late PlayState _playState;
+  late StreamSubscription<AccelerometerEvent>
+      _accelerometerSubscription; // Add this line
+
   PlayState get playState => _playState;
   set playState(PlayState playState) {
     _playState = playState;
@@ -42,8 +45,6 @@ class BrickBreaker extends FlameGame with HasCollisionDetection, TapDetector {
     }
   }
 
-  late StreamSubscription<AccelerometerEvent> _accelerometerSubscription;
-
   @override
   FutureOr<void> onLoad() async {
     super.onLoad();
@@ -51,26 +52,18 @@ class BrickBreaker extends FlameGame with HasCollisionDetection, TapDetector {
     camera.viewfinder.anchor = Anchor.topLeft;
 
     world.add(PlayArea());
-    // スケーリングファクターを追加
-    playState = PlayState.welcome;
-    const double tiltSensitivity = 0.2;
 
+    playState = PlayState.welcome;
     _accelerometerSubscription = accelerometerEventStream(
       samplingPeriod: SensorInterval.gameInterval,
     ).listen((event) {
       if (playState == PlayState.playing) {
         final bat = world.children.query<Bat>().first;
-        final newX = (bat.position.x - event.x * batStep * tiltSensitivity)
-            .clamp(0, width - batWidth);
-        bat.position.x = newX.toDouble();
+        final tilt = event.x; 
+        final newX = (bat.position.x - tilt * 10).clamp(batWidth / 2, width - batWidth / 2);
+        bat.position = Vector2(newX.toDouble(), bat.position.y);
       }
     });
-  }
-
-  @override
-  void onRemove() {
-    _accelerometerSubscription.cancel();
-    super.onRemove();
   }
 
   void startGame() {
@@ -113,6 +106,13 @@ class BrickBreaker extends FlameGame with HasCollisionDetection, TapDetector {
   void onTap() {
     super.onTap();
     startGame();
+  }
+
+  @override
+  void onRemove() {
+    // Cancel accelerometer subscription
+    _accelerometerSubscription.cancel();
+    super.onRemove();
   }
 
   @override

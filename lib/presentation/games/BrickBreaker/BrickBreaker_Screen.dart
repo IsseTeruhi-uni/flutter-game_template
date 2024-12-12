@@ -2,27 +2,26 @@ import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../brick_breaker.dart';
-import '../config.dart';
-import 'overlay_screen.dart'; // Add this import
-import 'score_card.dart'; // And this one too
+import 'widgets/game.dart';
+import 'config.dart';
+import 'widgets/overlay_screen.dart';
+import 'widgets/score_card.dart';
 
-class GameApp extends StatefulWidget {
-  // Modify this line
-  const GameApp({super.key});
+class BrickBreakerScreen extends StatefulWidget {
+  const BrickBreakerScreen({super.key});
 
-  @override // Add from here...
-  State<GameApp> createState() => _GameAppState();
+  @override
+  State<BrickBreakerScreen> createState() => _BrickBreakerScreenState();
 }
 
-class _GameAppState extends State<GameApp> {
-  late final BrickBreaker game;
+class _BrickBreakerScreenState extends State<BrickBreakerScreen> {
+  late final BrickBreakerGame game;
 
   @override
   void initState() {
     super.initState();
-    game = BrickBreaker();
-  } // To here.
+    game = BrickBreakerGame();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +51,6 @@ class _GameAppState extends State<GameApp> {
               padding: const EdgeInsets.all(16),
               child: Center(
                 child: Column(
-                  // Modify from here...
                   children: [
                     ScoreCard(score: game.score),
                     Expanded(
@@ -84,7 +82,7 @@ class _GameAppState extends State<GameApp> {
                       ),
                     ),
                   ],
-                ), // To here.
+                ),
               ),
             ),
           ),
