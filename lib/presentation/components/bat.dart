@@ -4,7 +4,7 @@ import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/material.dart';
 
-import '../widgets/game.dart';
+import '../games/BrickBreaker/widget/game.dart';
 
 class Bat extends PositionComponent
     with DragCallbacks, HasGameReference<BrickBreakerGame> {

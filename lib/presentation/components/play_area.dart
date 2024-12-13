@@ -4,7 +4,7 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
-import '../widgets/game.dart';
+import '../games/BrickBreaker/widget/game.dart';
 
 class PlayArea extends RectangleComponent with HasGameReference<BrickBreakerGame> {
   PlayArea()

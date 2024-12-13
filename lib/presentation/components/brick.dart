@@ -2,7 +2,7 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
-import '../widgets/game.dart';
+import '../games/BrickBreaker/widget/game.dart';
 import '../config.dart';
 import 'ball.dart';
 import 'bat.dart';

@@ -11,7 +11,7 @@ class HomeScreen extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const ChinchiroGameScreen()),
+          MaterialPageRoute(builder: (context) => ChinchiroGameScreen()),
         );
       },
       child: Scaffold(

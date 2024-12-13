@@ -7,8 +7,8 @@ import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:sensors_plus/sensors_plus.dart'; // Add this import
 
-import '../components/components.dart';
-import '../config.dart';
+import '../../../components/components.dart';
+import '../../../config.dart';
 
 enum PlayState { welcome, playing, gameOver, won }
 

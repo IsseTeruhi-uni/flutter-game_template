@@ -2,10 +2,10 @@ import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'widgets/game.dart';
-import 'config.dart';
-import 'widgets/overlay_screen.dart';
-import 'widgets/score_card.dart';
+import 'widget/game.dart';
+import '../../config.dart';
+import 'widget/overlay_screen.dart';
+import 'widget/score_card.dart';
 
 class BrickBreakerScreen extends StatefulWidget {
   const BrickBreakerScreen({super.key});
