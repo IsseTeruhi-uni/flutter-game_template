@@ -1,4 +1,4 @@
-import 'package:brick_breaker/presentation/games/chinchiro/Chinchiro_screen.dart';
+import 'package:brick_breaker/presentation/games/chinchiro/chinchiro_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 

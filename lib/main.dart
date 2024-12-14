@@ -1,11 +1,13 @@
 import 'package:brick_breaker/presentation/home/home_screen.dart';
 import 'package:flutter/material.dart';
-
-
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
-  runApp(const MinigameApp());
+  runApp(
+    const ProviderScope(child: MinigameApp()),
+  );
 }
+
 class MinigameApp extends StatelessWidget {
   const MinigameApp({super.key});
   @override

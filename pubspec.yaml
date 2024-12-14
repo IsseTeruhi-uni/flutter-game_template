@@ -12,6 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_animate: ^4.5.2
+  flutter_riverpod: ^2.6.1
   flutter_svg: ^2.0.16
   google_fonts: ^6.1.0
   sensors_plus: ^6.1.0
